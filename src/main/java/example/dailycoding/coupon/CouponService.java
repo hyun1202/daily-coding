@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Slf4j
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class CouponService {
     private final CouponRepository couponRepository;
 
-    public CouponDto getCoupon(CouponRequest request) {
+    public CouponDto createCoupon(CouponRequest request) {
         String uuid = UUID.randomUUID().toString();
 
         Coupon coupon = Coupon.builder()
