@@ -19,6 +19,7 @@ public class MemoryCouponRepository implements CouponRepository {
 
     @Override
     public Coupon addCoupon(String uuid, Coupon coupon) {
-        return couponMap.put(uuid, coupon);
+        couponMap.put(uuid, coupon);
+        return coupon;
     }
 }
