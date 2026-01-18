@@ -22,7 +22,7 @@ public class CouponDto {
                 coupon.getId(),
                 coupon.getName(),
                 coupon.getDiscountType(),
-                coupon.getDiscount(),
+                coupon.getDiscount().longValue(),
                 coupon.getStartDate(),
                 coupon.getEndDate()
         );

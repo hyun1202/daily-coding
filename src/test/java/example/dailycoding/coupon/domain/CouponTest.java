@@ -3,6 +3,7 @@ package example.dailycoding.coupon.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ class CouponTest {
         String uuid = UUID.randomUUID().toString();
         String name = "쿠폰 1";
         DiscountType discountType = DiscountType.AMOUNT;
-        double discount = 0;
+        BigDecimal discount = BigDecimal.valueOf(0);
         LocalDateTime startDate = LocalDateTime.of(2026, 1, 18, 3, 51);
         LocalDateTime endDate = LocalDateTime.of(2026, 2, 18, 3, 51);
 
