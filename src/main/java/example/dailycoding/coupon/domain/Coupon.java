@@ -21,8 +21,10 @@ public class Coupon {
     @Builder
     public Coupon(String uuid, String name, DiscountType discountType, BigDecimal discount, LocalDateTime startDate, LocalDateTime endDate) {
         Assert.notNull(uuid, "uuid is required");
+        Assert.hasText(name, "name must not be empty");
         Assert.notNull(discount, "discount is required");
-        Assert.notNull(endDate, "endDate is is required");
+        Assert.notNull(startDate, "startDate is required");
+        Assert.notNull(endDate, "endDate is required");
 
         Assert.isTrue(endDate.isAfter(startDate), "endDate must be after startDate");
         Assert.isTrue(discount.compareTo(BigDecimal.ZERO) >= 0, "discount must be greater than or equal to 0");
