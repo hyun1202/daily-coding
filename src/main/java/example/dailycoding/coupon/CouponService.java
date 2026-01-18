@@ -29,7 +29,7 @@ public class CouponService {
                 .endDate(request.endDate())
                 .build();
 
-        Coupon result = couponRepository.addCoupon(uuid, coupon);
+        Coupon result = couponRepository.addCoupon(coupon);
 
         return CouponDto.of(result);
     }
