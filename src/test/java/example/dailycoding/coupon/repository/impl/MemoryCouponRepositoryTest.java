@@ -3,6 +3,7 @@ package example.dailycoding.coupon.repository.impl;
 import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.DiscountType;
 import example.dailycoding.coupon.repository.CouponRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +12,15 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemoryCouponRepositoryTest {
-    CouponRepository repository = new MemoryCouponRepository();
+    CouponRepository repository;
+
+    @BeforeEach
+    void setUp() {
+        repository = new MemoryCouponRepository();
+    }
 
     @Test
     @DisplayName("생성된 쿠폰을 가져온다.")

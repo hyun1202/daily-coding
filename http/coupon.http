@@ -1,10 +1,10 @@
 ### create coupon
-POST http://localhost:18888/api/v1
+POST http://localhost:18888/api/v1/coupons
 Content-Type: Application/json
 
 {
   "name": "coupon1",
-  "discount": 0,
+  "discount": 10,
   "discountType": "AMOUNT",
   "startDate": "2026-01-18T10:00:00",
   "endDate": "2026-02-18T10:00:00"
