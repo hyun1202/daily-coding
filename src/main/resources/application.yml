@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: daily-coding
+server:
+  port: 18888
