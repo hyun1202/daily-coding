@@ -41,7 +41,10 @@ class MemoryCouponRepositoryTest {
 
         assertThat(result)
                 .isPresent()
-                .hasValue(coupon);
+                .get()
+                .extracting(Coupon::getId, Coupon::getName, Coupon::getDiscount,
+                            Coupon::getStartDate, Coupon::getEndDate)
+                .containsExactly(uuid, name, discount, startDate, endDate);
     }
 
     @Test
