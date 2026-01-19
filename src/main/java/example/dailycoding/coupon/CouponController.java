@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -27,10 +29,10 @@ public class CouponController {
         try {
             CouponDto coupon = couponService.getCoupon(couponId);
             return ResponseEntity.ok(coupon);
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e) {
             log.error("getCoupon Exception: {}", e.getMessage());
             return ResponseEntity
-                    .badRequest()
+                    .notFound()
                     .build();
         }
     }
