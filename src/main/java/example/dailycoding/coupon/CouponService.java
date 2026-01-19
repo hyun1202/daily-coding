@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Slf4j
@@ -32,5 +33,12 @@ public class CouponService {
         Coupon result = couponRepository.addCoupon(coupon);
 
         return CouponDto.of(result);
+    }
+
+    public CouponDto getCoupon(String couponId) {
+        Coupon coupon = couponRepository.getCoupon(couponId)
+                .orElseThrow(() -> new NoSuchElementException("not found coupon, invalid couponId"));
+
+        return CouponDto.of(coupon);
     }
 }
