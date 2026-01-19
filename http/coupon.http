@@ -9,3 +9,7 @@ Content-Type: Application/json
   "startDate": "2026-01-18T10:00:00",
   "endDate": "2026-02-18T10:00:00"
 }
+
+### get coupon
+GET http://localhost:18888/api/v1/coupons/ef71aea0-4025-4c90-9ebd-230295e1b3fa
+Content-Type: Application/json

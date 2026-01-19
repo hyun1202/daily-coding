@@ -33,4 +33,11 @@ public class CouponService {
 
         return CouponDto.of(result);
     }
+
+    public CouponDto getCoupon(String couponId) {
+        Coupon coupon = couponRepository.getCoupon(couponId)
+                .orElseThrow(() -> new IllegalArgumentException("not found coupon, invalid couponId"));
+
+        return CouponDto.of(coupon);
+    }
 }
