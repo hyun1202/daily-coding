@@ -65,7 +65,7 @@ class MemoryCouponRepositoryTest {
         // then
         assertThat(allCoupons)
                 .hasSize(2)
-                .extracting("id", "name", "discount", "startDate", "endDate")
+                .extracting(Coupon::getId, Coupon::getName, Coupon::getDiscount, Coupon::getStartDate, Coupon::getEndDate)
                 .containsExactlyInAnyOrder(
                         tuple(uuid, name, discount, startDate, endDate),
                         tuple(uuid2, name2, discount2, startDate2, endDate2)

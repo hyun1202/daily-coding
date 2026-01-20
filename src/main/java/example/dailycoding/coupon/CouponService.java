@@ -43,9 +43,7 @@ public class CouponService {
     }
 
     public List<CouponDto> getCoupons() {
-        List<Coupon> allCoupons = couponRepository.getAllCoupons();
-
-        return allCoupons.stream()
+        return couponRepository.getAllCoupons().stream()
                 .map(CouponDto::of)
                 .toList();
     }

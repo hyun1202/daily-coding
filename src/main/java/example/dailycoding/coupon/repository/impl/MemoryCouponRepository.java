@@ -24,8 +24,6 @@ public class MemoryCouponRepository implements CouponRepository {
 
     @Override
     public List<Coupon> getAllCoupons() {
-        return couponMap.values()
-                .stream()
-                .toList();
+        return new ArrayList<>(couponMap.values());
     }
 }
