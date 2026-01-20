@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -40,5 +40,11 @@ public class CouponService {
                 .orElseThrow(() -> new NoSuchElementException("not found coupon, invalid couponId"));
 
         return CouponDto.of(coupon);
+    }
+
+    public List<CouponDto> getCoupons() {
+        return couponRepository.getAllCoupons().stream()
+                .map(CouponDto::of)
+                .toList();
     }
 }

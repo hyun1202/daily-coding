@@ -5,6 +5,7 @@ import example.dailycoding.coupon.domain.DiscountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,7 +14,7 @@ public class CouponDto {
     private String id;
     private String name;
     private DiscountType discountType;
-    private double discount;
+    private BigDecimal discount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
@@ -22,7 +23,7 @@ public class CouponDto {
                 coupon.getId(),
                 coupon.getName(),
                 coupon.getDiscountType(),
-                coupon.getDiscount().longValue(),
+                coupon.getDiscount(),
                 coupon.getStartDate(),
                 coupon.getEndDate()
         );
