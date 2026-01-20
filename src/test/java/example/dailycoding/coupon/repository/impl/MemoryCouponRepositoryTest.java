@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemoryCouponRepositoryTest {
@@ -20,6 +22,54 @@ class MemoryCouponRepositoryTest {
     @BeforeEach
     void setUp() {
         repository = new MemoryCouponRepository();
+    }
+
+    @Test
+    @DisplayName("생성된 모든 쿠폰을 가져온다")
+    void getAllCoupons() {
+        // given
+        String uuid = UUID.randomUUID().toString();
+        String name = "coupon1";
+        BigDecimal discount = BigDecimal.valueOf(10);
+        LocalDateTime startDate = LocalDateTime.of(2026, 1, 18, 2, 11);
+        LocalDateTime endDate = startDate.plusDays(10);
+
+        Coupon coupon = Coupon.builder()
+                .uuid(uuid)
+                .name(name)
+                .discount(discount)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        String uuid2 = UUID.randomUUID().toString();
+        String name2 = "coupon2";
+        BigDecimal discount2 = BigDecimal.valueOf(100);
+        LocalDateTime startDate2 = LocalDateTime.of(2026, 1, 16, 2, 11);
+        LocalDateTime endDate2 = startDate.plusDays(20);
+
+        Coupon coupon2 = Coupon.builder()
+                .uuid(uuid2)
+                .name(name2)
+                .discount(discount2)
+                .startDate(startDate2)
+                .endDate(endDate2)
+                .build();
+
+        repository.addCoupon(coupon);
+        repository.addCoupon(coupon2);
+
+        // when
+        List<Coupon> allCoupons = repository.getAllCoupons();
+
+        // then
+        assertThat(allCoupons)
+                .hasSize(2)
+                .extracting("id", "name", "discount", "startDate", "endDate")
+                .containsExactlyInAnyOrder(
+                        tuple(uuid, name, discount, startDate, endDate),
+                        tuple(uuid2, name2, discount2, startDate2, endDate2)
+                );
     }
 
     @Test

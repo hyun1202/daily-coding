@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -35,5 +36,12 @@ public class CouponController {
                     .notFound()
                     .build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CouponDto>> getCoupons() {
+        List<CouponDto> coupons = couponService.getCoupons();
+
+        return ResponseEntity.ok(coupons);
     }
 }

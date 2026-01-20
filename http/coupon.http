@@ -13,3 +13,7 @@ Content-Type: Application/json
 ### get coupon
 GET http://localhost:18888/api/v1/coupons/ef71aea0-4025-4c90-9ebd-230295e1b3fa
 Content-Type: Application/json
+
+### get coupons
+GET http://localhost:18888/api/v1/coupons
+Content-Type: Application/json
