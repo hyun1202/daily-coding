@@ -53,7 +53,7 @@ class CouponServiceTest {
         // then
         assertThat(coupon)
                 .extracting(CouponDto::getName, CouponDto::getDiscountType, CouponDto::getDiscount, CouponDto::getStartDate, CouponDto::getEndDate)
-                .containsExactly(name, discountType, 10.0, startDate, endDate);
+                .containsExactly(name, discountType, discount, startDate, endDate);
         assertThat(coupon.getId()).isNotNull();
     }
 
@@ -85,7 +85,7 @@ class CouponServiceTest {
         // then
         assertThat(coupon)
                 .extracting(CouponDto::getId, CouponDto::getName, CouponDto::getDiscountType, CouponDto::getDiscount, CouponDto::getStartDate, CouponDto::getEndDate)
-                .containsExactly(id, name, discountType, 10.0, startDate, endDate);
+                .containsExactly(id, name, discountType, discount, startDate, endDate);
     }
 
     @Test
@@ -140,8 +140,8 @@ class CouponServiceTest {
                 .hasSize(2)
                 .extracting(CouponDto::getName, CouponDto::getDiscountType, CouponDto::getDiscount, CouponDto::getStartDate, CouponDto::getEndDate)
                 .containsExactlyInAnyOrder(
-                        tuple(name, discountType, 10.0, startDate, endDate),
-                        tuple(name2, discountType2, 100.0, startDate2, endDate2)
+                        tuple(name, discountType, discount, startDate, endDate),
+                        tuple(name2, discountType2, discount2, startDate2, endDate2)
                 );
     }
 }
