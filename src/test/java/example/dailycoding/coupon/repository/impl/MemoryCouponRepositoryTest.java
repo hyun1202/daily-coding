@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 class MemoryCouponRepositoryTest {
     CouponRepository repository;
@@ -46,7 +46,7 @@ class MemoryCouponRepositoryTest {
         String name2 = "coupon2";
         BigDecimal discount2 = BigDecimal.valueOf(100);
         LocalDateTime startDate2 = LocalDateTime.of(2026, 1, 16, 2, 11);
-        LocalDateTime endDate2 = startDate.plusDays(20);
+        LocalDateTime endDate2 = startDate2.plusDays(20);
 
         Coupon coupon2 = Coupon.builder()
                 .uuid(uuid2)
