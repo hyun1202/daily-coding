@@ -1,0 +1,7 @@
+### create member
+POST http://localhost:18888/api/v1/members
+Content-Type: Application/json
+
+{
+  "name": "member1"
+}

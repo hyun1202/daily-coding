@@ -36,4 +36,8 @@ public class Coupon {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public boolean isValid(LocalDateTime currentDate) {
+        return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate);
+    }
 }
