@@ -4,7 +4,10 @@ import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.repository.CouponRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
