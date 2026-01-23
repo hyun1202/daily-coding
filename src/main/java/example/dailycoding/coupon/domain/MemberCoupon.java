@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString
 @Getter
 public class MemberCoupon {
-    private Member member;
+    private final Member member;
     private List<Coupon> coupons;
 
     @Builder
@@ -25,7 +25,7 @@ public class MemberCoupon {
             coupons = new ArrayList<>();
         }
 
-        if (!valid(newCoupon)) {
+        if (isDuplicated(newCoupon)) {
             return false;
         }
 
@@ -34,14 +34,8 @@ public class MemberCoupon {
         return true;
     }
 
-    private boolean valid(Coupon newCoupon) {
-        for (Coupon coupon : coupons) {
-            String newCouponId = newCoupon.getId();
-            if (Objects.equals(newCouponId, coupon.getId())) {
-                return false;
-            }
-        }
-
-        return true;
+    private boolean isDuplicated(Coupon newCoupon) {
+        return coupons.stream()
+                .anyMatch(coupon -> Objects.equals(coupon.getId(), newCoupon.getId()));
     }
 }
