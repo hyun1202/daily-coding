@@ -28,4 +28,5 @@ public class MemberService {
 
         return MemberDto.of(savedMember);
     }
+
 }
