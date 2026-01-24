@@ -6,11 +6,19 @@ Content-Type: Application/json
   "name": "member1"
 }
 
+> {%
+    client.global.set("memberId", response.body.id);
+%}
+
 ### add coupon
 POST http://localhost:18888/api/v1/members/coupons
 Content-Type: Application/json
 
 {
-  "memberId": "17a7f7f5-f5c6-4419-a6db-f26b3a895631",
-  "couponId": "40c8b123-1428-4cb3-84a5-11b375b1394e"
+  "memberId": "{{memberId}}",
+  "couponId": "{{couponId}}"
 }
+
+### get coupons
+GET http://localhost:18888/api/v1/members/coupons?memberId={{memberId}}
+Content-Type: Application/json

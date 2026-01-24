@@ -1,5 +1,6 @@
 package example.dailycoding.coupon.domain;
 
+import example.dailycoding.coupon.exception.DuplicateCouponException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +37,9 @@ class MemberCouponTest {
                 .build();
 
         // when
-        boolean result = memberCoupon.addCoupon(coupon);
+        memberCoupon.addCoupon(coupon);
 
         // then
-        assertThat(result).isTrue();
         assertThat(memberCoupon.getCoupons())
                 .hasSize(1)
                 .extracting(Coupon::getId)
@@ -69,12 +69,9 @@ class MemberCouponTest {
                 .coupons(List.of(coupon))
                 .build();
 
-        // when
-        boolean result = memberCoupon.addCoupon(coupon);
-
-        // then
-        assertThat(result).isFalse();
-        assertThat(memberCoupon.getCoupons())
-                .hasSize(1);
+        // when & then
+        assertThatThrownBy(() -> {
+            memberCoupon.addCoupon(coupon);
+        }).isInstanceOf(DuplicateCouponException.class);
     }
 }
