@@ -22,7 +22,7 @@ public class MemberCouponController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberCouponDto> getCoupons(@RequestBody @Valid LoginMember loginMember) {
+    public ResponseEntity<MemberCouponDto> getCoupons(@ModelAttribute LoginMember loginMember) {
         MemberCouponDto memberCoupons = memberCouponService.getMemberCoupons(loginMember);
 
         return ResponseEntity.ok(memberCoupons);
