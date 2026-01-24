@@ -3,6 +3,7 @@ package example.dailycoding.coupon;
 import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
+import example.dailycoding.coupon.dto.LoginMember;
 import example.dailycoding.coupon.dto.MemberCouponDto;
 import example.dailycoding.coupon.dto.MemberCouponRequest;
 import example.dailycoding.coupon.exception.InvalidCouponException;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -21,6 +24,19 @@ public class MemberCouponService {
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final MemberCouponRepository memberCouponRepository;
+
+    public MemberCouponDto getMemberCoupons(LoginMember loginMember) {
+        Member member = findMember(loginMember.memberId());
+
+        return getMemberCoupons(member);
+    }
+
+    protected MemberCouponDto getMemberCoupons(Member member) {
+        MemberCoupon memberCoupon = memberCouponRepository.findById(member.getId())
+                .orElseGet(() -> new MemberCoupon(member, new ArrayList<>()));
+
+        return MemberCouponDto.of(memberCoupon);
+    }
 
     public MemberCouponDto addCoupon(MemberCouponRequest request) {
         Member member = findMember(request.memberId());

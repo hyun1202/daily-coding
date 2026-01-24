@@ -18,3 +18,11 @@ Content-Type: Application/json
   "memberId": "{{memberId}}",
   "couponId": "{{couponId}}"
 }
+
+### get coupons
+GET http://localhost:18888/api/v1/members/coupons
+Content-Type: Application/json
+
+{
+  "memberId": "{{memberId}}"
+}

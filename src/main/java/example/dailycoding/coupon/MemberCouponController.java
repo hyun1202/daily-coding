@@ -1,14 +1,12 @@
 package example.dailycoding.coupon;
 
+import example.dailycoding.coupon.dto.LoginMember;
 import example.dailycoding.coupon.dto.MemberCouponDto;
 import example.dailycoding.coupon.dto.MemberCouponRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +19,12 @@ public class MemberCouponController {
         MemberCouponDto memberCouponDto = memberCouponService.addCoupon(request);
 
         return ResponseEntity.ok(memberCouponDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberCouponDto> getCoupons(@RequestBody @Valid LoginMember loginMember) {
+        MemberCouponDto memberCoupons = memberCouponService.getMemberCoupons(loginMember);
+
+        return ResponseEntity.ok(memberCoupons);
     }
 }

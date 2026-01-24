@@ -18,4 +18,15 @@ public class CouponFixture {
                 .endDate(LocalDateTime.of(2026, 2, 18, 3, 51))
                 .build();
     }
+
+    public static Coupon getCoupon2() {
+        return Coupon.builder()
+                .uuid("uuid2")
+                .name("쿠폰 2")
+                .discountType(DiscountType.PERCENTAGE)
+                .discount(BigDecimal.valueOf(20))
+                .startDate(LocalDateTime.of(2026, 1, 18, 3, 51))
+                .endDate(LocalDateTime.of(2026, 2, 18, 3, 51))
+                .build();
+    }
 }
