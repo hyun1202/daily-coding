@@ -1,5 +1,6 @@
 package example.dailycoding.coupon.domain;
 
+import example.dailycoding.coupon.exception.DuplicateCouponException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,22 +17,18 @@ public class MemberCoupon {
 
     @Builder
     public MemberCoupon(Member member, List<Coupon> coupons) {
-        this.member = member;
-        this.coupons = coupons;
+        this.member = Objects.requireNonNull(member, "member cannot be null");
+        this.coupons = coupons == null? new ArrayList<>() : coupons;
     }
 
-    public boolean addCoupon(Coupon newCoupon) {
-        if (coupons == null) {
-            coupons = new ArrayList<>();
-        }
+    public void addCoupon(Coupon newCoupon) {
+        Objects.requireNonNull(newCoupon, "coupon cannot be null");
 
         if (isDuplicated(newCoupon)) {
-            return false;
+            throw new DuplicateCouponException("duplicate coupon, id: " + newCoupon.getId());
         }
 
         coupons.add(newCoupon);
-
-        return true;
     }
 
     private boolean isDuplicated(Coupon newCoupon) {

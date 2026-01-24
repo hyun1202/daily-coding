@@ -5,7 +5,6 @@ import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
 import example.dailycoding.coupon.dto.MemberCouponDto;
 import example.dailycoding.coupon.dto.MemberCouponRequest;
-import example.dailycoding.coupon.exception.DuplicateCouponException;
 import example.dailycoding.coupon.exception.InvalidCouponException;
 import example.dailycoding.coupon.repository.CouponRepository;
 import example.dailycoding.coupon.repository.MemberCouponRepository;
@@ -24,37 +23,53 @@ public class MemberCouponService {
     private final MemberCouponRepository memberCouponRepository;
 
     public MemberCouponDto addCoupon(MemberCouponRequest request) {
-        String memberId = request.memberId();
-        String couponId = request.couponId();
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException("not found member, id: " + memberId));
-
-        return addCoupon(member, couponId);
+        Member member = findMember(request.memberId());
+        return addCoupon(member, request.couponId());
     }
 
     protected MemberCouponDto addCoupon(Member member, String couponId) {
         // 존재하는 쿠폰 ID 확인
-        Coupon coupon = couponRepository.getCoupon(couponId)
-                .orElseThrow(() -> new NoSuchElementException("not found coupon, id: " + couponId));
+        Coupon coupon = getCoupon(couponId);
 
-        LocalDateTime now = LocalDateTime.now();
+        // 쿠폰 중복 여부 확인
+        validateCoupon(coupon);
 
-        if (!coupon.isValid(now)) {
-            throw new InvalidCouponException("invalid coupon, id: " + couponId);
-        }
+        // 유저 쿠폰 조회
+        MemberCoupon memberCoupon = findOrCreateMemberCoupon(member);
 
-        MemberCoupon memberCoupon = memberCouponRepository.findById(member.getId())
-                .orElseGet(() -> MemberCoupon.builder()
-                        .member(member)
-                        .build());
+        // 쿠폰 중복 여부 조회
+        addCouponToMemberCoupon(memberCoupon, coupon);
 
-        if (!memberCoupon.addCoupon(coupon)) {
-            throw new DuplicateCouponException("duplicate coupon, id: " + couponId);
-        }
-
+        // 쿠폰 등록
         MemberCoupon savedMemberCoupon = memberCouponRepository.save(memberCoupon);
 
         return MemberCouponDto.of(savedMemberCoupon);
+    }
+
+    private Member findMember(String memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("not found member, id: " + memberId));
+    }
+
+    private Coupon getCoupon(String couponId) {
+        return couponRepository.getCoupon(couponId)
+                .orElseThrow(() -> new NoSuchElementException("not found coupon, id: " + couponId));
+    }
+
+    private void validateCoupon(Coupon coupon) {
+        if (!coupon.isValid(LocalDateTime.now())) {
+            throw new InvalidCouponException("invalid coupon, id: " + coupon.getId());
+        }
+    }
+
+    private MemberCoupon findOrCreateMemberCoupon(Member member) {
+        return memberCouponRepository.findById(member.getId())
+                .orElseGet(() -> MemberCoupon.builder()
+                        .member(member)
+                        .build());
+    }
+
+    private void addCouponToMemberCoupon(MemberCoupon memberCoupon, Coupon coupon) {
+        memberCoupon.addCoupon(coupon);
     }
 }
