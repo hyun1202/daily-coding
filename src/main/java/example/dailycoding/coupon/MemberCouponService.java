@@ -71,7 +71,8 @@ public class MemberCouponService {
     protected void deleteCoupon(Member member, String couponId) {
         Coupon coupon = getCoupon(couponId);
 
-        MemberCoupon memberCoupon = findOrCreateMemberCoupon(member);
+        MemberCoupon memberCoupon = memberCouponRepository.findById(member.getId())
+                .orElseThrow(() -> new NoSuchElementException("this coupon not found in member's, id: " + couponId));
 
         memberCoupon.deleteCoupon(coupon);
     }

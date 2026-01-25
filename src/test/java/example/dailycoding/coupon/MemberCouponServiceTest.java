@@ -197,4 +197,20 @@ class MemberCouponServiceTest {
             service.deleteCoupon(loginMember, coupon2.getId());
         }).isInstanceOf(NoSuchElementException.class);
     }
+
+    @Test
+    @DisplayName("회원이 등록한 쿠폰이 없다면 등록할 수 없다")
+    void deleteCoupon_fail2() {
+        // given
+        Member member = MemberFixture.get();
+
+        memberRepository.save(member);
+
+        LoginMember loginMember = new LoginMember(member.getId());
+
+        // when & then
+        assertThatThrownBy(() -> {
+            service.deleteCoupon(loginMember, "couponId");
+        }).isInstanceOf(NoSuchElementException.class);
+    }
 }
