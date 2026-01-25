@@ -22,3 +22,7 @@ Content-Type: Application/json
 ### get coupons
 GET http://localhost:18888/api/v1/members/coupons?memberId={{memberId}}
 Content-Type: Application/json
+
+### delete coupon
+DELETE http://localhost:18888/api/v1/members/coupons/{{couponId}}?memberId={{memberId}}
+Content-Type: Application/json

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -137,5 +138,79 @@ class MemberCouponServiceTest {
         assertThat(result.userName()).isEqualTo(member.getName());
         assertThat(result.coupons())
                 .hasSize(0);
+    }
+
+    @Test
+    @DisplayName("회원이 등록한 쿠폰을 삭제할 수 있다")
+    void deleteCoupon() {
+        // given
+        Member member = MemberFixture.get();
+        Coupon coupon = CouponFixture.get();
+        Coupon coupon2 = CouponFixture.getCoupon2();
+
+        memberRepository.save(member);
+        couponRepository.addCoupon(coupon);
+        couponRepository.addCoupon(coupon2);
+
+        MemberCoupon memberCoupon = MemberCoupon.builder()
+                .member(member)
+                .coupons(List.of(coupon, coupon2))
+                .build();
+
+        memberCouponRepository.save(memberCoupon);
+
+        LoginMember loginMember = new LoginMember(member.getId());
+
+        // when
+        service.deleteCoupon(loginMember, coupon2.getId());
+
+        // then
+        assertThat(memberCoupon.getCoupons())
+                .hasSize(1)
+                .extracting(Coupon::getId)
+                .containsExactly(coupon.getId());
+    }
+
+    @Test
+    @DisplayName("회원이 등록하지 않은 쿠폰은 삭제할 수 없다")
+    void deleteCoupon_fail() {
+        // given
+        Member member = MemberFixture.get();
+        Coupon coupon = CouponFixture.get();
+        Coupon coupon2 = CouponFixture.getCoupon2();
+
+        memberRepository.save(member);
+        couponRepository.addCoupon(coupon);
+        couponRepository.addCoupon(coupon2);
+
+        MemberCoupon memberCoupon = MemberCoupon.builder()
+                .member(member)
+                .coupons(List.of(coupon))
+                .build();
+
+        memberCouponRepository.save(memberCoupon);
+
+        LoginMember loginMember = new LoginMember(member.getId());
+
+        // when & then
+        assertThatThrownBy(() -> {
+            service.deleteCoupon(loginMember, coupon2.getId());
+        }).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("회원이 등록한 쿠폰이 없다면 등록할 수 없다")
+    void deleteCoupon_fail2() {
+        // given
+        Member member = MemberFixture.get();
+
+        memberRepository.save(member);
+
+        LoginMember loginMember = new LoginMember(member.getId());
+
+        // when & then
+        assertThatThrownBy(() -> {
+            service.deleteCoupon(loginMember, "couponId");
+        }).isInstanceOf(NoSuchElementException.class);
     }
 }
