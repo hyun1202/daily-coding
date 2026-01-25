@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @ToString
@@ -18,7 +19,7 @@ public class MemberCoupon {
     @Builder
     public MemberCoupon(Member member, List<Coupon> coupons) {
         this.member = Objects.requireNonNull(member, "member cannot be null");
-        this.coupons = coupons == null? new ArrayList<>() : coupons;
+        this.coupons = coupons != null ? new ArrayList<>(coupons) : new ArrayList<>();
     }
 
     public void addCoupon(Coupon newCoupon) {
@@ -29,6 +30,14 @@ public class MemberCoupon {
         }
 
         coupons.add(newCoupon);
+    }
+
+    public void deleteCoupon(Coupon coupon) {
+        Objects.requireNonNull(coupon, "coupon cannot be null");
+
+        if (!coupons.removeIf(c -> c.getId().equals(coupon.getId()))) {
+            throw new NoSuchElementException("this coupon not found in member's, id: " + coupon.getId());
+        }
     }
 
     private boolean isDuplicated(Coupon newCoupon) {

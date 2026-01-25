@@ -27,4 +27,12 @@ public class MemberCouponController {
 
         return ResponseEntity.ok(memberCoupons);
     }
+
+    @DeleteMapping("/{couponId}")
+    public ResponseEntity<Void> deleteCoupon(@ModelAttribute LoginMember loginMember,
+                                             @PathVariable("couponId") String couponId) {
+        memberCouponService.deleteCoupon(loginMember, couponId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

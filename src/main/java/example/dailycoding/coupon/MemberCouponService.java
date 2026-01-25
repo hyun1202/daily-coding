@@ -62,6 +62,20 @@ public class MemberCouponService {
         return MemberCouponDto.of(savedMemberCoupon);
     }
 
+    public void deleteCoupon(LoginMember loginMember, String couponId) {
+        Member member = findMember(loginMember.memberId());
+
+        deleteCoupon(member, couponId);
+    }
+
+    protected void deleteCoupon(Member member, String couponId) {
+        Coupon coupon = getCoupon(couponId);
+
+        MemberCoupon memberCoupon = findOrCreateMemberCoupon(member);
+
+        memberCoupon.deleteCoupon(coupon);
+    }
+
     private Member findMember(String memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("not found member, id: " + memberId));

@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryMemberCouponRepositoryTest {
     MemoryMemberCouponRepository repository;
@@ -70,5 +68,4 @@ class MemoryMemberCouponRepositoryTest {
                 .extracting(Coupon::getId)
                 .containsExactly(coupon.getId(), coupon2.getId());
     }
-
 }
