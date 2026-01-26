@@ -9,17 +9,15 @@ import java.util.List;
 
 public record MemberCouponDto(
         String userName,
-        List<CouponDto> coupons
+        CouponDto coupon
 ) {
     public static MemberCouponDto of(MemberCoupon savedMemberCoupon) {
         Member member = savedMemberCoupon.getMember();
-        List<Coupon> coupons = savedMemberCoupon.getCoupons();
+        Coupon coupon1 = savedMemberCoupon.getCoupon();
 
         return new MemberCouponDto(
                 member.getName(),
-                coupons.stream()
-                        .map(CouponDto::of)
-                        .toList()
+                CouponDto.of(coupon1)
         );
     }
 }

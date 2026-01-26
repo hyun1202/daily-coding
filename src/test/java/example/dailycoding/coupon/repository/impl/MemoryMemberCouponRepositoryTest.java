@@ -3,6 +3,7 @@ package example.dailycoding.coupon.repository.impl;
 import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
+import example.dailycoding.coupon.domain.MemberCoupons;
 import example.dailycoding.coupon.fixture.CouponFixture;
 import example.dailycoding.coupon.fixture.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,21 +28,20 @@ class MemoryMemberCouponRepositoryTest {
         // given
         Member member = MemberFixture.get();
         Coupon coupon = CouponFixture.get();
-        Coupon coupon2 = CouponFixture.getCoupon2();
 
         MemberCoupon memberCoupon = MemberCoupon.builder()
                 .member(member)
-                .coupons(List.of(coupon, coupon2)).build();
+                .coupon(coupon)
+                .build();
 
         // when
         MemberCoupon savedMemberCoupon = repository.save(memberCoupon);
 
         // then
         assertThat(savedMemberCoupon.getMember().getId()).isEqualTo(member.getId());
-        assertThat(savedMemberCoupon.getCoupons())
-                .hasSize(2)
+        assertThat(savedMemberCoupon.getCoupon())
                 .extracting(Coupon::getId)
-                .containsExactly(coupon.getId(), coupon2.getId());
+                .isEqualTo(coupon.getId());
     }
 
     @Test
@@ -50,22 +50,22 @@ class MemoryMemberCouponRepositoryTest {
         // given
         Member member = MemberFixture.get();
         Coupon coupon = CouponFixture.get();
-        Coupon coupon2 = CouponFixture.getCoupon2();
 
         MemberCoupon memberCoupon = MemberCoupon.builder()
                 .member(member)
-                .coupons(List.of(coupon, coupon2)).build();
+                .coupon(coupon)
+                .build();
 
         repository.save(memberCoupon);
 
         // when
-        MemberCoupon foundMemberCoupon = repository.findById(member.getId()).orElse(null);
+        MemberCoupons result = repository.findById(member.getId());
 
         // then
-        assertThat(foundMemberCoupon.getMember().getId()).isEqualTo(member.getId());
-        assertThat(foundMemberCoupon.getCoupons())
-                .hasSize(2)
+        assertThat(result.getMemberCoupons())
+                .hasSize(1)
+                .extracting(MemberCoupon::getCoupon)
                 .extracting(Coupon::getId)
-                .containsExactly(coupon.getId(), coupon2.getId());
+                .containsExactly(coupon.getId());
     }
 }

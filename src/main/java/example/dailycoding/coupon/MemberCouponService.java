@@ -3,6 +3,7 @@ package example.dailycoding.coupon;
 import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
+import example.dailycoding.coupon.domain.MemberCoupons;
 import example.dailycoding.coupon.dto.LoginMember;
 import example.dailycoding.coupon.dto.MemberCouponDto;
 import example.dailycoding.coupon.dto.MemberCouponRequest;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,17 +25,18 @@ public class MemberCouponService {
     private final CouponRepository couponRepository;
     private final MemberCouponRepository memberCouponRepository;
 
-    public MemberCouponDto getMemberCoupons(LoginMember loginMember) {
+    public List<MemberCouponDto> getMemberCoupons(LoginMember loginMember) {
         Member member = findMember(loginMember.memberId());
 
         return getMemberCoupons(member);
     }
 
-    protected MemberCouponDto getMemberCoupons(Member member) {
-        MemberCoupon memberCoupon = memberCouponRepository.findById(member.getId())
-                .orElseGet(() -> new MemberCoupon(member, new ArrayList<>()));
+    protected List<MemberCouponDto> getMemberCoupons(Member member) {
+        MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
 
-        return MemberCouponDto.of(memberCoupon);
+        return memberCoupons.getMemberCoupons().stream()
+                .map(MemberCouponDto::of)
+                .toList();
     }
 
     public MemberCouponDto addCoupon(MemberCouponRequest request) {
@@ -51,13 +52,13 @@ public class MemberCouponService {
         validateCoupon(coupon);
 
         // 유저 쿠폰 조회
-        MemberCoupon memberCoupon = findOrCreateMemberCoupon(member);
+        MemberCoupons memberCoupons = findOrCreateMemberCoupon(member);
 
         // 쿠폰 중복 여부 조회
-        addCouponToMemberCoupon(memberCoupon, coupon);
+        isDuplicated(memberCoupons, member, coupon);
 
         // 쿠폰 등록
-        MemberCoupon savedMemberCoupon = memberCouponRepository.save(memberCoupon);
+        MemberCoupon savedMemberCoupon = memberCouponRepository.save(MemberCoupon.of(member, coupon));
 
         return MemberCouponDto.of(savedMemberCoupon);
     }
@@ -71,10 +72,11 @@ public class MemberCouponService {
     protected void deleteCoupon(Member member, String couponId) {
         Coupon coupon = getCoupon(couponId);
 
-        MemberCoupon memberCoupon = memberCouponRepository.findById(member.getId())
-                .orElseThrow(() -> new NoSuchElementException("this coupon not found in member's, id: " + couponId));
+        MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
 
-        memberCoupon.deleteCoupon(coupon);
+        List<MemberCoupon> deletedCoupons = memberCoupons.deleteCoupon(coupon);
+
+        memberCouponRepository.delete(member.getId(), deletedCoupons);
     }
 
     private Member findMember(String memberId) {
@@ -93,14 +95,11 @@ public class MemberCouponService {
         }
     }
 
-    private MemberCoupon findOrCreateMemberCoupon(Member member) {
-        return memberCouponRepository.findById(member.getId())
-                .orElseGet(() -> MemberCoupon.builder()
-                        .member(member)
-                        .build());
+    private MemberCoupons findOrCreateMemberCoupon(Member member) {
+        return memberCouponRepository.findById(member.getId());
     }
 
-    private void addCouponToMemberCoupon(MemberCoupon memberCoupon, Coupon coupon) {
-        memberCoupon.addCoupon(coupon);
+    private void isDuplicated(MemberCoupons memberCoupons, Member member, Coupon coupon) {
+        memberCoupons.isDuplicated(coupon);
     }
 }

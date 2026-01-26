@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members/coupons")
@@ -22,8 +24,8 @@ public class MemberCouponController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberCouponDto> getCoupons(@ModelAttribute LoginMember loginMember) {
-        MemberCouponDto memberCoupons = memberCouponService.getMemberCoupons(loginMember);
+    public ResponseEntity<List<MemberCouponDto>> getCoupons(@ModelAttribute LoginMember loginMember) {
+        List<MemberCouponDto> memberCoupons = memberCouponService.getMemberCoupons(loginMember);
 
         return ResponseEntity.ok(memberCoupons);
     }

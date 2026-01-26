@@ -1,47 +1,34 @@
 package example.dailycoding.coupon.domain;
 
-import example.dailycoding.coupon.exception.DuplicateCouponException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @ToString
 @Getter
 public class MemberCoupon {
     private final Member member;
-    private List<Coupon> coupons;
+    private final Coupon coupon;
+    private String status;
 
     @Builder
-    public MemberCoupon(Member member, List<Coupon> coupons) {
+    private MemberCoupon(Member member, Coupon coupon, String status) {
         this.member = Objects.requireNonNull(member, "member cannot be null");
-        this.coupons = coupons != null ? new ArrayList<>(coupons) : new ArrayList<>();
+        this.coupon = Objects.requireNonNull(coupon, "coupon cannot be null");
+        this.status = status;
     }
 
-    public void addCoupon(Coupon newCoupon) {
-        Objects.requireNonNull(newCoupon, "coupon cannot be null");
-
-        if (isDuplicated(newCoupon)) {
-            throw new DuplicateCouponException("duplicate coupon, id: " + newCoupon.getId());
-        }
-
-        coupons.add(newCoupon);
+    public static MemberCoupon of(Member member, Coupon coupon) {
+        return new MemberCoupon(member, coupon, "미사용");
     }
 
-    public void deleteCoupon(Coupon coupon) {
-        Objects.requireNonNull(coupon, "coupon cannot be null");
-
-        if (!coupons.removeIf(c -> c.getId().equals(coupon.getId()))) {
-            throw new NoSuchElementException("this coupon not found in member's, id: " + coupon.getId());
-        }
+    public String getCouponId() {
+        return coupon.getId();
     }
 
-    private boolean isDuplicated(Coupon newCoupon) {
-        return coupons.stream()
-                .anyMatch(coupon -> Objects.equals(coupon.getId(), newCoupon.getId()));
+    public boolean hasCoupon(String couponId) {
+        return Objects.equals(getCouponId(), couponId);
     }
 }
