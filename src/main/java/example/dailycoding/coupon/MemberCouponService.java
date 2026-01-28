@@ -7,6 +7,7 @@ import example.dailycoding.coupon.domain.MemberCoupons;
 import example.dailycoding.coupon.dto.LoginMember;
 import example.dailycoding.coupon.dto.MemberCouponDto;
 import example.dailycoding.coupon.dto.MemberCouponRequest;
+import example.dailycoding.coupon.exception.DuplicateCouponException;
 import example.dailycoding.coupon.exception.InvalidCouponException;
 import example.dailycoding.coupon.repository.CouponRepository;
 import example.dailycoding.coupon.repository.MemberCouponRepository;
@@ -100,6 +101,8 @@ public class MemberCouponService {
     }
 
     private void isDuplicated(MemberCoupons memberCoupons, Member member, Coupon coupon) {
-        memberCoupons.isDuplicated(coupon);
+        if (memberCoupons.isDuplicated(coupon)) {
+            throw new DuplicateCouponException(String.format("duplicated coupon. memberId: %s, couponId: %s", member.getId(), coupon.getId()));
+        }
     }
 }
