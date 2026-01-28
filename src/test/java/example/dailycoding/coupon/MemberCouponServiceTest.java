@@ -121,16 +121,16 @@ class MemberCouponServiceTest {
         List<MemberCouponDto> memberCoupons = service.getMemberCoupons(loginMember);
 
         // then
-        assertThat(memberCoupons)
-                .hasSize(2)
-                .extracting(MemberCouponDto::userName)
-                .containsExactly(member.getName(), member.getName());
-
-        assertThat(memberCoupons)
-                .hasSize(2)
-                .extracting(MemberCouponDto::coupon)
-                .extracting(CouponDto::getId)
-                .containsExactly(coupon.getId(), coupon2.getId());
+        assertThat(memberCoupons).satisfiesExactly(
+                dto -> {
+                    assertThat(dto.userName()).isEqualTo(member.getName());
+                    assertThat(dto.coupon().getId()).isEqualTo(coupon.getId());
+                },
+                dto -> {
+                    assertThat(dto.userName()).isEqualTo(member.getName());
+                    assertThat(dto.coupon().getId()).isEqualTo(coupon2.getId());
+                }
+        );
     }
 
     @Test

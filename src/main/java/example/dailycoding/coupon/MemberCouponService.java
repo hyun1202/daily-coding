@@ -102,7 +102,7 @@ public class MemberCouponService {
 
     private void isDuplicated(MemberCoupons memberCoupons, Member member, Coupon coupon) {
         if (memberCoupons.isDuplicated(coupon)) {
-            throw new DuplicateCouponException("duplicated coupon. memberId: " + member.getId() + ", couponId: " + coupon.getId());
+            throw new DuplicateCouponException(String.format("duplicated coupon. memberId: %s, couponId: %s", member.getId(), coupon.getId()));
         }
     }
 }

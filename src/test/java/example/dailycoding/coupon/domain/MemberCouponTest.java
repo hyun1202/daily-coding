@@ -24,8 +24,6 @@ class MemberCouponTest {
         Coupon coupon = CouponFixture.get();
         Member member = MemberFixture.get();
 
-        String id = coupon.getId();
-
         // when
         MemberCoupon memberCoupon = MemberCoupon.of(member, coupon);
 
@@ -55,7 +53,7 @@ class MemberCouponTest {
     }
 
     @Test
-    @DisplayName("해당 쿠폰을 가지고 있으면 false를 반환한다")
+    @DisplayName("해당 쿠폰을 가지고 있지 않으면 false를 반환한다")
     void hasCoupon_false() {
         // given
         Coupon coupon = CouponFixture.get();
