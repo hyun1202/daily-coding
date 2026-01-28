@@ -13,7 +13,7 @@ public class MemberCoupons {
 
     @Builder
     public MemberCoupons(List<MemberCoupon> memberCoupons) {
-        this.memberCoupons = memberCoupons;
+        this.memberCoupons = memberCoupons != null ? memberCoupons : new ArrayList<>();
     }
 
     public List<MemberCoupon> deleteCoupon(Coupon deletedCoupon) {
