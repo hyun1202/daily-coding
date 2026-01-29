@@ -9,7 +9,8 @@ import java.util.List;
 
 public record MemberCouponDto(
         String userName,
-        CouponDto coupon
+        CouponDto coupon,
+        String status
 ) {
     public static MemberCouponDto of(MemberCoupon savedMemberCoupon) {
         Member member = savedMemberCoupon.getMember();
@@ -17,7 +18,8 @@ public record MemberCouponDto(
 
         return new MemberCouponDto(
                 member.getName(),
-                CouponDto.of(coupon1)
+                CouponDto.of(coupon1),
+                savedMemberCoupon.getStatus()
         );
     }
 }

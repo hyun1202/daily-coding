@@ -37,4 +37,12 @@ public class MemberCouponController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{couponId}")
+    public ResponseEntity<MemberCouponDto> useCoupon(@ModelAttribute LoginMember loginMember,
+                                                     @PathVariable("couponId") String couponId) {
+        MemberCouponDto memberCouponDto = memberCouponService.useCoupon(loginMember, couponId);
+
+        return ResponseEntity.ok(memberCouponDto);
+    }
 }

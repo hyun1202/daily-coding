@@ -1,19 +1,13 @@
 package example.dailycoding.coupon.domain;
 
-import example.dailycoding.coupon.exception.DuplicateCouponException;
+import example.dailycoding.coupon.exception.AlreadyUsedCouponException;
 import example.dailycoding.coupon.fixture.CouponFixture;
 import example.dailycoding.coupon.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemberCouponTest {
 
@@ -71,5 +65,43 @@ class MemberCouponTest {
 
         // then
         assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("쿠폰을 사용할 수 있다")
+    void useCoupon() {
+        // given
+        Member member = MemberFixture.get();
+        Coupon coupon = CouponFixture.get();
+
+        MemberCoupon memberCoupon = MemberCoupon.builder()
+                .member(member)
+                .coupon(coupon)
+                .build();
+
+        // when
+        memberCoupon.useCoupon();
+
+        // then
+        assertThat(memberCoupon.getStatus()).isEqualTo("사용 완료");
+    }
+
+    @Test
+    @DisplayName("이미 사용한 쿠폰은 다시 사용할 수 없다")
+    void useCoupon_fail() {
+        // given
+        Member member = MemberFixture.get();
+        Coupon coupon = CouponFixture.get();
+
+        MemberCoupon memberCoupon = MemberCoupon.builder()
+                .member(member)
+                .coupon(coupon)
+                .build();
+
+        // when & then
+        assertThatThrownBy(() -> {
+            memberCoupon.useCoupon();
+            memberCoupon.useCoupon();
+        }).isInstanceOf(AlreadyUsedCouponException.class);
     }
 }

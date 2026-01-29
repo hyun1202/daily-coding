@@ -32,6 +32,13 @@ public class MemberCoupons {
         return new ArrayList<>(memberCoupons);
     }
 
+    public MemberCoupon findByCouponId(String couponId) {
+        return memberCoupons.stream()
+                .filter(c -> c.hasCoupon(couponId))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("not found coupon, id: " + couponId));
+    }
+
     public boolean isDuplicated(Coupon newCoupon) {
         return memberCoupons.stream()
                 .anyMatch(c -> c.hasCoupon(newCoupon.getId()));

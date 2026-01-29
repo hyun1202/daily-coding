@@ -4,9 +4,7 @@ import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
 import example.dailycoding.coupon.domain.MemberCoupons;
-import example.dailycoding.coupon.dto.LoginMember;
-import example.dailycoding.coupon.dto.MemberCouponDto;
-import example.dailycoding.coupon.dto.MemberCouponRequest;
+import example.dailycoding.coupon.dto.*;
 import example.dailycoding.coupon.exception.DuplicateCouponException;
 import example.dailycoding.coupon.exception.InvalidCouponException;
 import example.dailycoding.coupon.repository.CouponRepository;
@@ -32,6 +30,19 @@ public class MemberCouponService {
         return getMemberCoupons(member);
     }
 
+    public MemberCouponDto useCoupon(LoginMember loginMember, String couponId) {
+        Member member = findMember(loginMember.memberId());
+        MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
+
+        MemberCoupon memberCoupon = memberCoupons.findByCouponId(couponId);
+        // 쿠폰 만료 여부 확인
+        validateCoupon(memberCoupon.getCoupon());
+        memberCoupon.useCoupon();
+
+        MemberCoupon savedMemberCoupon = memberCouponRepository.save(memberCoupon);
+        return MemberCouponDto.of(savedMemberCoupon);
+    }
+
     protected List<MemberCouponDto> getMemberCoupons(Member member) {
         MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
 
@@ -49,7 +60,7 @@ public class MemberCouponService {
         // 존재하는 쿠폰 ID 확인
         Coupon coupon = getCoupon(couponId);
 
-        // 쿠폰 중복 여부 확인
+        // 쿠폰 만료 여부 확인
         validateCoupon(coupon);
 
         // 유저 쿠폰 조회

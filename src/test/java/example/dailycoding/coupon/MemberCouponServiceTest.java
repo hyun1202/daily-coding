@@ -233,4 +233,29 @@ class MemberCouponServiceTest {
             service.deleteCoupon(loginMember, "couponId");
         }).isInstanceOf(NoSuchElementException.class);
     }
+
+    @Test
+    @DisplayName("회원은 쿠폰을 사용할 수 있다")
+    void useCoupon() {
+        // given
+        Member member = MemberFixture.get();
+        Coupon coupon = CouponFixture.get();
+
+        memberRepository.save(member);
+        couponRepository.addCoupon(coupon);
+
+        MemberCoupon memberCoupon = MemberCoupon.builder()
+                .member(member)
+                .coupon(coupon)
+                .build();
+
+        memberCouponRepository.save(memberCoupon);
+        LoginMember loginMember = new LoginMember(member.getId());
+
+        // when
+        MemberCouponDto result = service.useCoupon(loginMember, coupon.getId());
+
+        // then
+        assertThat(result.status()).isEqualTo("사용 완료");
+    }
 }

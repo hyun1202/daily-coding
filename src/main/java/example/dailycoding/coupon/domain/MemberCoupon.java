@@ -1,5 +1,6 @@
 package example.dailycoding.coupon.domain;
 
+import example.dailycoding.coupon.exception.AlreadyUsedCouponException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -30,5 +31,14 @@ public class MemberCoupon {
 
     public boolean hasCoupon(String couponId) {
         return Objects.equals(getCouponId(), couponId);
+    }
+
+    public void useCoupon() {
+        if ("사용 완료".equals(status)) {
+            throw new AlreadyUsedCouponException(String.format(
+                    "already used coupon, memberId: %s, couponId: %s",
+                    member.getId(), coupon.getId()));
+        }
+        this.status = "사용 완료";
     }
 }
