@@ -35,6 +35,8 @@ public class MemberCouponService {
         MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
 
         MemberCoupon memberCoupon = memberCoupons.findByCouponId(couponId);
+        // 쿠폰 만료 여부 확인
+        validateCoupon(memberCoupon.getCoupon());
         memberCoupon.useCoupon();
 
         MemberCoupon savedMemberCoupon = memberCouponRepository.save(memberCoupon);
@@ -58,7 +60,7 @@ public class MemberCouponService {
         // 존재하는 쿠폰 ID 확인
         Coupon coupon = getCoupon(couponId);
 
-        // 쿠폰 중복 여부 확인
+        // 쿠폰 만료 여부 확인
         validateCoupon(coupon);
 
         // 유저 쿠폰 조회
