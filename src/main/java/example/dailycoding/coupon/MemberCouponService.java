@@ -4,9 +4,7 @@ import example.dailycoding.coupon.domain.Coupon;
 import example.dailycoding.coupon.domain.Member;
 import example.dailycoding.coupon.domain.MemberCoupon;
 import example.dailycoding.coupon.domain.MemberCoupons;
-import example.dailycoding.coupon.dto.LoginMember;
-import example.dailycoding.coupon.dto.MemberCouponDto;
-import example.dailycoding.coupon.dto.MemberCouponRequest;
+import example.dailycoding.coupon.dto.*;
 import example.dailycoding.coupon.exception.DuplicateCouponException;
 import example.dailycoding.coupon.exception.InvalidCouponException;
 import example.dailycoding.coupon.repository.CouponRepository;
@@ -30,6 +28,17 @@ public class MemberCouponService {
         Member member = findMember(loginMember.memberId());
 
         return getMemberCoupons(member);
+    }
+
+    public MemberCouponDto useCoupon(LoginMember loginMember, String couponId) {
+        Member member = findMember(loginMember.memberId());
+        MemberCoupons memberCoupons = memberCouponRepository.findById(member.getId());
+
+        MemberCoupon memberCoupon = memberCoupons.findByCouponId(couponId);
+        memberCoupon.useCoupon();
+
+        MemberCoupon savedMemberCoupon = memberCouponRepository.save(memberCoupon);
+        return MemberCouponDto.of(savedMemberCoupon);
     }
 
     protected List<MemberCouponDto> getMemberCoupons(Member member) {

@@ -26,3 +26,7 @@ Content-Type: Application/json
 ### delete coupon
 DELETE http://localhost:18888/api/v1/members/coupons/{{couponId}}?memberId={{memberId}}
 Content-Type: Application/json
+
+### use coupon
+PATCH http://localhost:18888/api/v1/members/coupons/{{couponId}}?memberId={{memberId}}
+Content-Type: Application/json
